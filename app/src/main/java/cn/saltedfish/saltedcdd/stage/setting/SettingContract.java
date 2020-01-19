@@ -13,6 +13,10 @@ public interface SettingContract {
 
         void setNickname(String pNickname);
 
+        boolean getThreePlayer();
+
+        boolean getFourPlayer();
+
         String getNickname();
     }
 

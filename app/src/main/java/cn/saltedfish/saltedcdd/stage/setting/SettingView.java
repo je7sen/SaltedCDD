@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.RadioButton;
 
 import cn.saltedfish.saltedcdd.R;
 
@@ -16,6 +17,10 @@ public class SettingView implements SettingContract.View {
     protected EditText mNicknameInput;
 
     protected ImageButton mBtnBack;
+
+    protected RadioButton mThreePlayer;
+
+    protected RadioButton mFourPlayer;
 
     public SettingView(Activity pActivity)
     {
@@ -35,6 +40,10 @@ public class SettingView implements SettingContract.View {
         });
 
         mNicknameInput = pActivity.findViewById(R.id.editText_nickname);
+
+        mThreePlayer = pActivity.findViewById(R.id.threePlayerButton);
+
+        mFourPlayer = pActivity.findViewById(R.id.fourPlayerButton);
 
         mBtnBack = pActivity.findViewById(R.id.button_back);
         mBtnBack.setOnClickListener(new View.OnClickListener(){
@@ -75,5 +84,17 @@ public class SettingView implements SettingContract.View {
     public String getNickname()
     {
         return String.valueOf(mNicknameInput.getText());
+    }
+
+    @Override
+    public boolean getThreePlayer()
+    {
+        return mThreePlayer.isChecked();
+    }
+
+    @Override
+    public boolean getFourPlayer()
+    {
+        return mFourPlayer.isChecked();
     }
 }

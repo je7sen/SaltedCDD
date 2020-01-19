@@ -16,12 +16,14 @@ import cn.saltedfish.saltedcdd.game.PlayerAction;
 import cn.saltedfish.saltedcdd.game.ActionHint;
 import cn.saltedfish.saltedcdd.game.card.Card;
 import cn.saltedfish.saltedcdd.game.routine.FourPlayerGame;
+import cn.saltedfish.saltedcdd.game.routine.ThreePlayerGame;
+import cn.saltedfish.saltedcdd.data.Config;
 import cn.saltedfish.saltedcdd.robot.RobotPlayerController;
 
 public class GameModel {
     protected CDDGame mGame;
 
-    protected PlayerModel[] mPlayerModels = new PlayerModel[4];
+    protected PlayerModel[] mPlayerModels = new PlayerModel[3];
 
     protected HandlerThread mHandlerThread;
 
@@ -36,36 +38,51 @@ public class GameModel {
         mHandlerThread = new HandlerThread("GameBackgroundThread");
         mHandlerThread.start();
 
-        mGame = new FourPlayerGame();
+        if(Config.getPlayerMode() == 4)
+        {
+            mGame = new FourPlayerGame();
+            mPlayerModels = new PlayerModel[4];
+        }
+        else
+        {
+            mGame = new ThreePlayerGame();
+        }
+
         mGame.setEventListener(new EventDispatcher());
 
-        for (int i = 0; i < mPlayerModels.length; i++)
+        for (int i = 0; i < mGame.getPlayerCount(); i++)
         {
             mPlayerModels[i] = new PlayerModel();
         }
 
         mHandler = new Handler(mHandlerThread.getLooper());
 
-        for (int i = 0; i < mPlayerModels.length; i++)
+        for (int i = 0; i < mGame.getPlayerCount(); i++)
         {
             mPlayerModels[i] = new PlayerModel();
         }
 
-        for (int i = 1; i < mPlayerModels.length; i++)
+        for (int i = 1; i < mGame.getPlayerCount(); i++)
         {
             attachPlayerController(i, new RobotPlayerController(mPlayerModels[i].getPlayer()));
             mPlayerModels[i].setRobot(true);
+            mPlayerModels[i].setNickname("Player"+i);
         }
 
         mPlayerModels[0].setNickname(Config.getNickname());
-        mPlayerModels[1].setNickname("大咸鱼");
-        mPlayerModels[2].setNickname("二咸鱼");
-        mPlayerModels[3].setNickname("三咸鱼");
+        //mPlayerModels[1].setNickname("大咸鱼");
+        //mPlayerModels[2].setNickname("二咸鱼");
+        ///mPlayerModels[3].setNickname("三咸鱼");
     }
 
     public PlayerModel getPlayerModel(int index)
     {
         return mPlayerModels[index];
+    }
+
+    public int getPlayerCount()
+    {
+        return mGame.getPlayerCount();
     }
 
     public void attachPlayerController(int index, IPlayerController pPlayerController)
@@ -98,7 +115,7 @@ public class GameModel {
             @Override
             public void run()
             {
-                Player[] players = new Player[mPlayerModels.length];
+                Player[] players = new Player[mGame.getPlayerCount()];
                 for (int i = 0; i < players.length; i++)
                 {
                     players[i] = mPlayerModels[i].getPlayer();

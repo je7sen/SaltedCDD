@@ -23,6 +23,15 @@ public class SettingActivity extends FullscreenActivity {
                 Config.setNickname(newNickname);
             }
 
+            if(mView.getFourPlayer())
+            {
+                Config.setPlayerMode(4);
+            }
+            else
+            {
+                Config.setPlayerMode(3);
+            }
+
             Config.setBGMVolume(mView.getBGMVolume() / 100f);
             Config.save();
 

@@ -10,6 +10,8 @@ public class Config {
 
     protected static float sBGMVolume;
 
+    protected static int sPlayerMode;
+
     protected static final String PrefName = "Config";
 
     public static void load()
@@ -17,6 +19,7 @@ public class Config {
         SharedPreferences prefs = GameApplication.getAppContext().getSharedPreferences(PrefName, Context.MODE_PRIVATE);
         sNickname = prefs.getString("nickname", "SaltedFish");
         sBGMVolume = prefs.getFloat("bgm_volume", 0.8f);
+        sPlayerMode = prefs.getInt("playerMode", 3);
     }
 
     public static String getNickname()
@@ -39,12 +42,23 @@ public class Config {
         sBGMVolume = pBGMVolume;
     }
 
+    public static int getPlayerMode()
+    {
+        return sPlayerMode;
+    }
+
+    public static void setPlayerMode(int pPlayerMode)
+    {
+        sPlayerMode = pPlayerMode;
+    }
+
     public static void save()
     {
         SharedPreferences prefs = GameApplication.getAppContext().getSharedPreferences(PrefName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("nickname", sNickname);
         editor.putFloat("bgm_volume", sBGMVolume);
+        editor.putInt("playerMode", sPlayerMode);
         editor.apply();
     }
 }
